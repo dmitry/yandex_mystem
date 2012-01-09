@@ -4,6 +4,10 @@
 
 Mystem is a software that provided by the Yandex only for non-commercial project. With use of it you can detect base forms of the words in a text, make a simple morphological analysis of russian words.
 
+## Installation
+
+    gem install yandex_mystem
+
 ## License
 
 First of all, read license on http://company.yandex.ru/technologies/mystem/
