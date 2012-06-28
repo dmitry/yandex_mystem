@@ -30,22 +30,25 @@ module YandexMystem
     private
 
     def self.command
-      postfix = if RUBY_PLATFORM =~ /(win|w)32$/
-                  'win.exe'
-                elsif RUBY_PLATFORM =~ /32.+linux$/
-                  'linux-32'
-                elsif RUBY_PLATFORM =~ /64.+linux$/
-                  'linux-64'
-                elsif RUBY_PLATFORM =~ /darwin/
-                  'mac'
-                elsif RUBY_PLATFORM =~ /freebsd/
-                  raise 'Create an issue or add pull request on a github.'
-                else
-                  raise 'Unknown OS'
-                end
-
       path = Pathname.new(__FILE__) + '../../app/'
-      path + "mystem-#{postfix}"
+      path + "mystem-#{command_postfix}"
+    end
+
+    def self.command_postfix
+      @command_postfix ||= case RUBY_PLATFORM
+        when /(win|w)32$/
+          'win.exe'
+        when /32.+linux$/ || /i486.+linux$/
+          'linux-32'
+        when /64.+linux$/
+          'linux-64'
+        when /darwin/
+          'mac'
+        when /freebsd/
+          raise 'Create an issue or add pull request on a github.'
+        else
+          raise 'Unknown OS'
+        end
     end
   end
 end
