@@ -3,35 +3,25 @@ require 'yandex_mystem/version'
 
 module YandexMystem
   class Base
-    # TODO add -i
-    def self.stem(text)
-      exec = Array(command).tap do |c|
-        c << '-e utf-8 -n'
-      end.join(' ')
+    WORD_SCANNER_REGEXP = /^([^\{]+)\{(.+)\}$/.freeze
 
-      data = Open3.popen3(exec) do |stdin, stdout, stderr|
+    def self.stem(text)
+      exec = [command, self::ARGUMENTS].join(' ')
+
+      data = Open3.popen3(exec) do |stdin, stdout, _|
         stdin.write text
         stdin.close
-        #stderr.read
         stdout.read
       end
 
-      data = data.scan(/^([^\{]+)\{(.+)\}$/).map do |(word, words)|
-        words = words.split('|').select do |w|
-          !(w =~ /.+\?\?$/)
-        end
-
-        [word, words]
-      end.flatten(1)
-
-      Hash[*data]
+      parse(data)
     end
 
-    private
-
     def self.command
-      path = Pathname.new(__FILE__) + '../../app/'
-      path + "mystem-#{command_postfix}"
+      @command ||= begin
+        path = Pathname.new(__FILE__) + '../../app/'
+        path + "mystem-#{command_postfix}"
+      end
     end
 
     def self.command_postfix
@@ -49,6 +39,58 @@ module YandexMystem
         else
           raise 'Unknown OS'
         end
+    end
+  end
+
+  class Simple < Base
+    ARGUMENTS = '-e utf-8 -n'
+
+    NOT_INCLUDE_REGEXP = /.+\?\?$/.freeze
+
+
+    def self.parse(data)
+      parsed = data.scan(WORD_SCANNER_REGEXP).map do |(word, words)|
+        words = words.split('|').select do |w|
+          !(w =~ NOT_INCLUDE_REGEXP)
+        end
+
+        [word, words]
+      end.flatten(1)
+
+      Hash[*parsed]
+    end
+  end
+
+  class Extended < Base
+    ARGUMENTS = '-e utf-8 -nifg'
+
+    REGEXP = /([^\|:]+):([0-9\.]+)=([A-Z]+)/
+
+    Word = Struct.new(:word, :frequency, :part)
+
+    def self.parse(data)
+      parsed = {}
+
+      data.scan(WORD_SCANNER_REGEXP).each do |(word, words)|
+        unless parsed.key?(word)
+          words = words.scan(REGEXP).map do |w|
+            to_word(w)
+          end
+
+          unless words.size.zero?
+            parsed[word] = words.sort_by(&:frequency).reverse
+          end
+        end
+      end
+
+      parsed
+    end
+
+    private
+
+    def self.to_word(w)
+      word, frequency, part = w
+      Word.new(word, frequency.to_f, part)
     end
   end
 end

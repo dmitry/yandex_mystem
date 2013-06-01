@@ -27,4 +27,5 @@ This gem contains executables for there platforms:
 
 ## Usage
 
-    YandexMystem::Base.stem 'О предложении в котором много слов.'
+    YandexMystem::Simple.stem 'О предложении в котором много слов.'
+    YandexMystem::Extended.stem 'нет сов'
