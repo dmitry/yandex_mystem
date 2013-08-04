@@ -16,4 +16,5 @@ Gem::Specification.new do |gem|
   gem.version       = YandexMystem::VERSION
 
   gem.add_development_dependency "rspec", '~> 2.8'
+  gem.add_development_dependency "rake", '~> 10.1'
 end
