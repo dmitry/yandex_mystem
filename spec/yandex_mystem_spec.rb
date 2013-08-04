@@ -1,8 +1,6 @@
 # encoding: utf-8
 require 'spec_helper'
 
-require 'yaml'
-
 describe YandexMystem do
   context YandexMystem::Simple do
     it "should stem words" do

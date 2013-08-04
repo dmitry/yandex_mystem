@@ -1,4 +1,7 @@
-# Yandex Mystem
+# Yandex Mystem 0.1.0
+
+[![Build Status](https://secure.travis-ci.org/dmitry/yandex_mystem.png?branch=master)](http://travis-ci.org/dmitry/yandex_mystem) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/dmitry/yandex_mystem/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
 
 ## Introduction
 
