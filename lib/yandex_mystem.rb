@@ -1,5 +1,6 @@
 require 'open3'
 require 'yandex_mystem/version'
+require 'pathname'
 
 module YandexMystem
   class Base
@@ -28,7 +29,7 @@ module YandexMystem
       @command_postfix ||= case RUBY_PLATFORM
         when /(win|w)32$/
           'win.exe'
-        when /32.+linux$/ || /i486.+linux$/
+        when /32.+linux$|i[46]86.+linux$/
           'linux-32'
         when /64.+linux$/
           'linux-64'
