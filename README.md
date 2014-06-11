@@ -27,12 +27,12 @@ First of all, read license on http://company.yandex.ru/technologies/mystem/
 
 This gem contains executables for there platforms:
 
-* Windows
-* Linux 2.6 32-bit
-* Linux 2.6 64-bit
-* Mac OS X 10.5
+* Windows 7 32-bit
+* Linux 3.5 32-bit
+* Linux 3.1 64-bit
+* Freebsd 9.0 64-bit
 
-...of six, FreeBSD not in the gem. If you need it, add pull request or issue.
+Note: Mystem 3.0 not support Mac OS X, sorry.
 
 ## Usage
 
