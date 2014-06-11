@@ -4,7 +4,28 @@ require 'spec_helper'
 describe YandexMystem do
   context YandexMystem::Simple do
     it "should stem words" do
-      data = YandexMystem::Simple.stem('мальчики мальчиков девочки девочек компьютеров компьютере сов пошли elements')
+      data = YandexMystem::Simple.stem("мальчики мальчиков девочки девочек компьютеров компьютере сов пошли elements")
+      data['мальчики'].should eq %w(мальчик)
+      data['мальчиков'].should eq %w(мальчик мальчиков мальчиковый)
+      data['девочки'].should eq %w(девочка)
+      data['девочек'].should eq %w(девочка)
+      data['сов'].should eq %w(сова)
+      data['пошли'].should eq %w(пойти посылать)
+      data['elements'].should eq []
+    end
+    
+    it "should stem words in few lines" do
+      data = YandexMystem::Simple.stem(%[
+                                       
+                                       
+                                       мальчики 
+                                       мальчиков 
+                                      девочки девочек компьютеров компьютере сов пошли 
+                                      elements
+                                      
+                                      
+                                      
+                                      ])
       data['мальчики'].should eq %w(мальчик)
       data['мальчиков'].should eq %w(мальчик мальчиков мальчиковый)
       data['девочки'].should eq %w(девочка)

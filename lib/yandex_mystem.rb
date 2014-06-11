@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'open3'
 require 'yandex_mystem/version'
 require 'pathname'
@@ -44,19 +46,19 @@ module YandexMystem
   end
 
   class Simple < Base
-    ARGUMENTS = '-e utf-8 --format json'    
+    ARGUMENTS = '-e utf-8 -n --format json'    
 
 
     def self.parse(data)
-      Hash[ JSON.parse(data, :symbolize_names => true).inject([]){|s, h| s + [[ h[:text], h[:analysis].map{|a| a[:lex]} ]]}  ]
+      Hash[ JSON.parse('[' + data.split("\n").join(",") + ']', :symbolize_names => true).inject([]){|s, h| s + [[ h[:text], h[:analysis].map{|a| a[:lex]} ]]}  ]
     end
   end
 
   class Raw < Base
-    ARGUMENTS = '-e utf-8 -ig --weight --format json --eng-gr'        
+    ARGUMENTS = '-e utf-8 -ig -n --weight --format json --eng-gr'        
 
     def self.parse(data)
-      JSON.parse data, :symbolize_names => true
+      JSON.parse('[' + data.split("\n").join(",") + ']', :symbolize_names => true)
     end    
   end
 end
