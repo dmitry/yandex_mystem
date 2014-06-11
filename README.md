@@ -19,7 +19,7 @@ Mystem is a software that provided by the Yandex only for non-commercial project
 
 ## License
 
-First of all, read license on http://company.yandex.ru/technologies/mystem/
+First of all, read license on http://api.yandex.ru/mystem/
 
 `Mystem` available only for non-commercial usage.
 
