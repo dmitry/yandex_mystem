@@ -1,10 +1,12 @@
+# encoding: utf-8
+
 require 'open3'
 require 'yandex_mystem/version'
 require 'pathname'
+require 'json'
 
 module YandexMystem
-  class Base
-    WORD_SCANNER_REGEXP = /^([^\{]+)\{(.+)\}$/.freeze
+  class Base    
 
     def self.stem(text)
       exec = [command, self::ARGUMENTS].join(' ')
@@ -20,7 +22,7 @@ module YandexMystem
 
     def self.command
       @command ||= begin
-        path = Pathname.new(__FILE__) + '../../app/'
+        path = Pathname.new(__FILE__) + '../../bin/'
         path + "mystem-#{command_postfix}"
       end
     end
@@ -34,9 +36,9 @@ module YandexMystem
         when /64.+linux$/
           'linux-64'
         when /darwin/
-          'mac'
+          raise 'Mystem 3.0 does not support Max OS X.'
         when /freebsd/
-          raise 'Create an issue or add pull request on a github.'
+          'bsd'
         else
           raise 'Unknown OS'
         end
@@ -44,54 +46,19 @@ module YandexMystem
   end
 
   class Simple < Base
-    ARGUMENTS = '-e utf-8 -n'
-
-    NOT_INCLUDE_REGEXP = /.+\?\?$/.freeze
+    ARGUMENTS = '-e utf-8 -n --format json'    
 
 
     def self.parse(data)
-      parsed = data.scan(WORD_SCANNER_REGEXP).map do |(word, words)|
-        words = words.split('|').select do |w|
-          !(w =~ NOT_INCLUDE_REGEXP)
-        end
-
-        [word, words]
-      end.flatten(1)
-
-      Hash[*parsed]
+      Hash[ JSON.parse('[' + data.split("\n").join(",") + ']', :symbolize_names => true).inject([]){|s, h| s + [[ h[:text], h[:analysis].map{|a| a[:lex]} ]]}  ]
     end
   end
 
-  class Extended < Base
-    ARGUMENTS = '-e utf-8 -nifg'
-
-    REGEXP = /([^\|:]+):([0-9\.]+)=([A-Z]+)/
-
-    Word = Struct.new(:word, :frequency, :part)
+  class Raw < Base
+    ARGUMENTS = '-e utf-8 -ig -n --weight --format json --eng-gr'        
 
     def self.parse(data)
-      parsed = {}
-
-      data.scan(WORD_SCANNER_REGEXP).each do |(word, words)|
-        unless parsed.key?(word)
-          words = words.scan(REGEXP).map do |w|
-            to_word(w)
-          end
-
-          unless words.size.zero?
-            parsed[word] = words.sort_by(&:frequency).reverse
-          end
-        end
-      end
-
-      parsed
-    end
-
-    private
-
-    def self.to_word(w)
-      word, frequency, part = w
-      Word.new(word, frequency.to_f, part)
-    end
+      JSON.parse('[' + data.split("\n").join(",") + ']', :symbolize_names => true)
+    end    
   end
 end

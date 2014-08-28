@@ -3,6 +3,12 @@
 [![Build Status](https://secure.travis-ci.org/dmitry/yandex_mystem.png?branch=master)](http://travis-ci.org/dmitry/yandex_mystem) [![Gem Version](https://badge.fury.io/rb/yandex_mystem.png)](http://badge.fury.io/rb/yandex_mystem) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/dmitry/yandex_mystem/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 
+## Version 3.0 not compatible with previous
+
+Mystem 3.0 support JSON format, so we should use this option.
+This gem (yandex_mystem) now returns information in JSON-like ruby native format (array of hashes).
+More info about Mystem changes: http://api.yandex.ru/mystem/downloads/
+
 ## Introduction
 
 Mystem is a software that provided by the Yandex only for non-commercial project. With use of it you can detect base forms of the words in a text, make a simple morphological analysis of russian words.
@@ -13,7 +19,7 @@ Mystem is a software that provided by the Yandex only for non-commercial project
 
 ## License
 
-First of all, read license on http://company.yandex.ru/technologies/mystem/
+First of all, read license on http://api.yandex.ru/mystem/
 
 `Mystem` available only for non-commercial usage.
 
@@ -21,14 +27,14 @@ First of all, read license on http://company.yandex.ru/technologies/mystem/
 
 This gem contains executables for there platforms:
 
-* Windows
-* Linux 2.6 32-bit
-* Linux 2.6 64-bit
-* Mac OS X 10.5
+* Windows 7 32-bit
+* Linux 3.5 32-bit
+* Linux 3.1 64-bit
+* Freebsd 9.0 64-bit
 
-...of six, FreeBSD not in the gem. If you need it, add pull request or issue.
+Note: Mystem 3.0 not support Mac OS X, sorry.
 
 ## Usage
 
     YandexMystem::Simple.stem 'О предложении в котором много слов.'
-    YandexMystem::Extended.stem 'нет сов'
+    YandexMystem::Raw.stem 'нет сов'
