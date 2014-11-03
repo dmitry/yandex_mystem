@@ -9,13 +9,14 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{Yandex Mystem makes morphological analysis of a russian text}
   gem.homepage      = ''
 
-  gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  gem.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.name          = 'yandex_mystem'
   gem.require_paths = %w(lib)
   gem.version       = YandexMystem::VERSION
 
-  gem.add_development_dependency 'rspec', '~> 2.8'
+  gem.add_dependency 'oj', '~> 2.11'
+  gem.add_development_dependency 'rspec', '~> 3.0'
   gem.add_development_dependency 'rake', '~> 10.1'
 end

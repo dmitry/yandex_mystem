@@ -3,7 +3,7 @@
 require 'open3'
 require 'yandex_mystem/version'
 require 'pathname'
-require 'json'
+require 'oj'
 
 module YandexMystem
   class Base    
@@ -43,6 +43,10 @@ module YandexMystem
           raise 'Unknown OS'
         end
     end
+
+    def self.as_json(data)
+      Oj.load("[#{data.split("\n").join(',')}]", symbol_keys: true)
+    end
   end
 
   class Simple < Base
@@ -50,7 +54,14 @@ module YandexMystem
 
 
     def self.parse(data)
-      Hash[ JSON.parse('[' + data.split("\n").join(",") + ']', :symbolize_names => true).inject([]){|s, h| s + [[ h[:text], h[:analysis].map{|a| a[:lex]} ]]}  ]
+      Hash[
+        as_json(data).map do |h|
+          [
+            h[:text],
+            h[:analysis].map { |a| a[:lex] }
+          ]
+        end
+      ]
     end
   end
 
@@ -58,7 +69,7 @@ module YandexMystem
     ARGUMENTS = '-e utf-8 -ig -n --weight --format json --eng-gr'        
 
     def self.parse(data)
-      JSON.parse('[' + data.split("\n").join(",") + ']', :symbolize_names => true)
+      as_json(data)
     end    
   end
 end

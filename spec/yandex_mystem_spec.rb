@@ -3,36 +3,39 @@ require 'spec_helper'
 
 describe YandexMystem do
   context YandexMystem::Simple do
-    it "should stem words" do
+    it 'should stem words' do
       data = YandexMystem::Simple.stem("мальчики мальчиков девочки девочек компьютеров компьютере сов пошли elements")
-      data['мальчики'].should eq %w(мальчик)
-      data['мальчиков'].should eq %w(мальчик мальчиков мальчиковый)
-      data['девочки'].should eq %w(девочка)
-      data['девочек'].should eq %w(девочка)
-      data['сов'].should eq %w(сова)
-      data['пошли'].should eq %w(пойти посылать)
-      data['elements'].should eq []
+
+      expect(data['мальчики']).to eq %w(мальчик)
+      expect(data['мальчиков']).to eq %w(мальчик мальчиков мальчиковый)
+      expect(data['девочки']).to eq %w(девочка)
+      expect(data['девочек']).to eq %w(девочка)
+      expect(data['сов']).to eq %w(сова)
+      expect(data['пошли']).to eq %w(пойти посылать)
+      expect(data['elements']).to eq []
     end
     
-    it "should stem words in few lines" do
-      data = YandexMystem::Simple.stem(%[
-                                       
-                                       
-                                       мальчики 
-                                       мальчиков 
-                                      девочки девочек компьютеров компьютере сов пошли 
-                                      elements
-                                      
-                                      
-                                      
-                                      ])
-      data['мальчики'].should eq %w(мальчик)
-      data['мальчиков'].should eq %w(мальчик мальчиков мальчиковый)
-      data['девочки'].should eq %w(девочка)
-      data['девочек'].should eq %w(девочка)
-      data['сов'].should eq %w(сова)
-      data['пошли'].should eq %w(пойти посылать)
-      data['elements'].should eq []
+    it 'should stem words in few lines' do
+      data = YandexMystem::Simple.stem('
+        мальчики
+        мальчиков
+        девочки
+        девочек
+        компьютеров
+        компьютере
+        сов
+        пошли
+        elements
+      ')
+
+      expect(data['мальчики']).to eq %w(мальчик)
+      expect(data['мальчиков']).to eq %w(мальчик мальчиков мальчиковый)
+      expect(data['девочки']).to eq %w(девочка)
+      expect(data['девочек']).to eq %w(девочка)
+      expect(data['компьютере']).to eq %w(компьютер)
+      expect(data['сов']).to eq %w(сова)
+      expect(data['пошли']).to eq %w(пойти посылать)
+      expect(data['elements']).to eq []
     end
   end
 
@@ -40,28 +43,28 @@ describe YandexMystem do
     it 'latin words' do
       response = YandexMystem::Raw.stem('Elements')
 
-      response.size.should eq 1
-      response[0][:analysis].should eq []      
-      response[0][:text].should eq 'Elements'      
+      expect(response.size).to eq 1
+      expect(response[0][:analysis]).to eq []
+      expect(response[0][:text]).to eq 'Elements'
     end
 
     it 'multiple definitions' do
       response = YandexMystem::Raw.stem('девочка мальчиков пошла к комьютерам искать, в прочем, как и всегда')
 
-      response.size.should eq 11
+      expect(response.size).to eq 11
 
-      response.find_all{|h| h[:text] == 'девочка'}.first[:analysis].first[:lex].should eq 'девочка'
-      response.find_all{|h| h[:text] == 'девочка'}.first[:analysis].first[:wt].should eq 1
-      response.find_all{|h| h[:text] == 'девочка'}.first[:analysis].first[:gr].should eq 'S,f,anim=nom,sg'      
+      analysis = response.find { |h| h[:text] == 'девочка' }[:analysis].first
 
-      response.find_all{|h| h[:text] == 'мальчиков'}.first[:analysis].size.should eq 3
+      expect(analysis[:lex]).to eq 'девочка'
+      expect(analysis[:wt]).to eq 1
+      expect(analysis[:gr]).to eq 'S,f,anim=nom,sg'
+
+      expect(response.find { |h| h[:text] == 'мальчиков'}[:analysis].size).to eq 3
     end
 
     it 'get geo name' do
       response = YandexMystem::Raw.stem('Москва')
-      response.find_all{|h| h[:text] == 'Москва'}.first[:analysis].first[:gr].should include 'geo'
+      expect(response.find { |h| h[:text] == 'Москва' }[:analysis].first[:gr]).to include 'geo'
     end
-
-
   end
 end
