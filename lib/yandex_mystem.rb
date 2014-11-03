@@ -36,7 +36,7 @@ module YandexMystem
         when /64.+linux$/
           'linux-64'
         when /darwin/
-          raise 'Mystem 3.0 does not support Max OS X.'
+          'osx'
         when /freebsd/
           'bsd'
         else
