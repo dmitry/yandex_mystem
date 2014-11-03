@@ -17,6 +17,8 @@ Mystem is a software that provided by the Yandex only for non-commercial project
 
     gem install yandex_mystem
 
+Current version is **3.0.1**
+
 ## License
 
 First of all, read license on http://api.yandex.ru/mystem/
@@ -31,8 +33,7 @@ This gem contains executables for there platforms:
 * Linux 3.5 32-bit
 * Linux 3.1 64-bit
 * Freebsd 9.0 64-bit
-
-Note: Mystem 3.0 not support Mac OS X, sorry.
+* Mac OS X
 
 ## Usage
 
