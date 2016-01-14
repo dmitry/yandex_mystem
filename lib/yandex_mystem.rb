@@ -46,7 +46,7 @@ module YandexMystem
   end
 
   class Simple < Base
-    ARGUMENTS = '-e utf-8 -n --format json'    
+    ARGUMENTS = '-d -e utf-8 -n --format json'
 
 
     def self.parse(data)
@@ -55,7 +55,7 @@ module YandexMystem
   end
 
   class Raw < Base
-    ARGUMENTS = '-e utf-8 -ig -n --weight --format json --eng-gr'        
+    ARGUMENTS = '-d -e utf-8 -ig -n --weight --format json --eng-gr'
 
     def self.parse(data)
       JSON.parse('[' + data.split("\n").join(",") + ']', :symbolize_names => true)
