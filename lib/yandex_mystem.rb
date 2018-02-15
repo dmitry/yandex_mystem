@@ -33,7 +33,7 @@ module YandexMystem
           'win.exe'
         when /32.+linux$|i[46]86.+linux$/
           'linux-32'
-        when /64.+linux$/
+        when /64.+linux(-gnu)?$/
           'linux-64'
         when /darwin/
           'osx'
